@@ -1,22 +1,21 @@
-const menuBtn = document.querySelector('.menu-toggle');
-const nav = document.querySelector('.main-nav');
-menuBtn?.addEventListener('click', () => {
-  const open = nav.classList.toggle('open');
-  menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+const menuButton = document.querySelector('.menu-toggle');
+const navigation = document.querySelector('.main-nav');
+
+menuButton?.addEventListener('click', () => {
+  const expanded = menuButton.getAttribute('aria-expanded') === 'true';
+  menuButton.setAttribute('aria-expanded', String(!expanded));
+  menuButton.setAttribute('aria-label', expanded ? 'Open navigation' : 'Close navigation');
+  navigation?.classList.toggle('open', !expanded);
 });
-nav?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-  nav.classList.remove('open');
-  menuBtn?.setAttribute('aria-expanded', 'false');
-}));
 
-document.getElementById('year').textContent = new Date().getFullYear();
-
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      observer.unobserve(entry.target);
-    }
+navigation?.querySelectorAll('a').forEach((link) => {
+  link.addEventListener('click', () => {
+    navigation.classList.remove('open');
+    menuButton?.setAttribute('aria-expanded', 'false');
+    menuButton?.setAttribute('aria-label', 'Open navigation');
   });
-}, { threshold: 0.12 });
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+});
+
+const year = document.getElementById('year');
+if (year) year.textContent = new Date().getFullYear();
+
